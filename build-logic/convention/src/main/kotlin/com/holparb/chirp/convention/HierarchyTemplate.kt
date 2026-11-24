@@ -1,0 +1,46 @@
+package com.holparb.chirp.convention
+
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinHierarchyTemplate
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
+
+@OptIn(ExperimentalKotlinGradlePluginApi::class)
+private val hierarchyTemplate = KotlinHierarchyTemplate {
+    withSourceSetTree(
+        KotlinSourceSetTree.main,
+        KotlinSourceSetTree.test,
+    )
+
+    common {
+        withCompilations { true }
+
+        group("mobile") {
+            withAndroidTarget()
+            group("ios") {
+                withIos()
+            }
+        }
+
+        group("native") {
+            withNative()
+
+            group("apple") {
+                withApple()
+
+                group("ios") {
+                    withIos()
+                }
+
+                group("macos") {
+                    withMacos()
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalKotlinGradlePluginApi::class)
+fun KotlinMultiplatformExtension.applyHierarchyTemplate() {
+    applyHierarchyTemplate(hierarchyTemplate)
+}
